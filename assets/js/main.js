@@ -50,33 +50,22 @@
     el.setAttribute("aria-label", text);
     el.textContent = "";
     const stacks = [];
+    const cells = 20;
     [...text].forEach((c) => {
-      if (!/\d/.test(c)) {
-        const plain = make("span", "", c);
-        plain.setAttribute("aria-hidden", "true");
-        return el.append(plain);
-      }
       const digit = make("span", "digit");
       digit.setAttribute("aria-hidden", "true");
-      const stack = make("span", "digit__stack");
-      for (let n = 0; n < 20; n++) stack.append(make("span", "", String(n % 10)));
-      digit.append(stack);
       el.append(digit);
+      if (!/\d/.test(c)) return digit.append(c);
+      const stack = make("span", "digit__stack");
+      for (let n = 0; n < cells; n++) stack.append(make("span", "", String(n % 10)));
+      digit.append(stack);
       stacks.push({ stack, target: 10 + Number(c) });
     });
     return () => stacks.forEach(({ stack, target }, i) => stack.animate(
-      [{ transform: "translateY(0)" }, { transform: `translateY(-${target}em)` }],
+      [{ transform: "translateY(0)" }, { transform: `translateY(-${(target * 100) / cells}%)` }],
       { duration: 1500 + i * 250, easing: "cubic-bezier(.2, .7, .1, 1)", fill: "forwards" }
     ));
   };
-
-  document.querySelectorAll("[data-marquee]").forEach((marquee) => {
-    if (reduceMotion) return;
-    const group = marquee.querySelector(".marquee__group");
-    const clone = group.cloneNode(true);
-    clone.setAttribute("aria-hidden", "true");
-    group.after(clone);
-  });
 
   const form = document.querySelector(".lead-form");
   form.addEventListener("submit", (event) => {
@@ -87,10 +76,52 @@
     form.querySelector("button[type=submit] span").textContent = "Recebemos seus dados";
   });
 
-  const header = document.querySelector(".site-header");
-  const onScroll = () => header.classList.toggle("is-scrolled", scrollY > 8);
+  const nav = document.querySelector(".nav");
+  const onScroll = () => nav.classList.toggle("is-scrolled", scrollY > 8);
   addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  const toggle = nav.querySelector(".nav__toggle");
+  const menu = nav.querySelector(".nav__menu");
+  const setMenu = (open) => {
+    toggle.setAttribute("aria-expanded", String(open));
+    menu.classList.toggle("is-open", open);
+  };
+  toggle.addEventListener("click", () => setMenu(toggle.getAttribute("aria-expanded") !== "true"));
+  menu.addEventListener("click", (event) => { if (event.target.closest("a")) setMenu(false); });
+
+  document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector(".carousel__track");
+    const [prev, next] = carousel.querySelectorAll(".carousel__button");
+    const step = () => track.querySelector("li").offsetWidth;
+    const update = () => {
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+    };
+    prev.addEventListener("click", () => track.scrollBy({ left: -step() }));
+    next.addEventListener("click", () => track.scrollBy({ left: step() }));
+    track.addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
+
+    let drag = null;
+    track.addEventListener("pointerdown", (event) => {
+      if (event.pointerType !== "mouse") return;
+      drag = { x: event.clientX, left: track.scrollLeft };
+      track.classList.add("is-dragging");
+      track.setPointerCapture(event.pointerId);
+    });
+    track.addEventListener("pointermove", (event) => {
+      if (drag) track.scrollLeft = drag.left - (event.clientX - drag.x);
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      drag = null;
+      track.classList.remove("is-dragging");
+    };
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+  });
 
   const targets = document.querySelectorAll("[data-split], [data-count], [data-reveal], [data-stagger]");
   if (reduceMotion || !("IntersectionObserver" in window)) {
