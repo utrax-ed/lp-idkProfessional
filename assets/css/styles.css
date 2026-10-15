@@ -99,6 +99,8 @@ em { font-style: normal; color: var(--green); }
 .field__control:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(68, 192, 130, .24); }
 .lead-form.was-validated .field__control:invalid { border-color: #f37053; }
 .lead-form__fine { font-size: 11px; color: rgba(255, 255, 255, .4); }
+.lead-form__status:empty { display: none; }
+.lead-form__status { font-size: 13px; color: #f37053; }
 .lead-form.is-sent .lead-form__fields { opacity: .45; pointer-events: none; }
 .lead-form__fields { display: grid; gap: 16px; transition: opacity .3s ease; }
 
