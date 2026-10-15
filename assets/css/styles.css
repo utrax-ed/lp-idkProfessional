@@ -95,6 +95,7 @@ em { font-style: normal; color: var(--green); }
 .lead-form__split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .field { display: block; min-width: 0; color: rgba(255, 255, 255, .6); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .field__control { display: block; width: 100%; margin-top: 8px; padding: 13px 14px; border: 1px solid var(--line-on-dark); border-radius: 6px; background: var(--black); color: var(--cream); font: 15.5px var(--font-sans); outline: 0; transition: border-color .2s ease, box-shadow .2s ease; }
+.field__hint { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: none; color: rgba(255, 255, 255, .45); }
 .field__control::placeholder { color: rgba(240, 235, 225, .4); }
 .field__control:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(68, 192, 130, .24); }
 .lead-form.was-validated .field__control:invalid { border-color: #f37053; }

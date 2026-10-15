@@ -84,6 +84,13 @@
     phone.setCustomValidity(isValidPhone(digits) ? "" : "Informe um WhatsApp válido com DDD, ex.: (11) 90000-0000.");
   });
 
+  const zip = form.elements["0-2/zip"];
+  zip.addEventListener("input", () => {
+    const digits = zip.value.replace(/\D/g, "").slice(0, 8);
+    zip.value = digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+    zip.setCustomValidity(!digits || digits.length === 8 ? "" : "Informe o CEP completo, ex.: 01310-100.");
+  });
+
   const success = form.querySelector(".lead-success");
   const showSuccess = () => {
     const firstName = form.elements["0-1/firstname"].value.trim().split(/\s+/)[0];
