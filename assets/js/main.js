@@ -68,12 +68,45 @@
   };
 
   const form = document.querySelector(".lead-form");
+  const submit = form.querySelector("button[type=submit]");
+  const status = form.querySelector(".lead-form__status");
+  const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
+
+  const sendToHubspot = () => {
+    const { hsPortal, hsForm } = form.dataset;
+    const fields = [...new FormData(form)]
+      .filter(([, value]) => String(value).trim())
+      .map(([field, value]) => {
+        const [objectTypeId, name] = field.split("/");
+        return { objectTypeId, name, value: String(value).trim() };
+      });
+    const context = { pageUri: location.href, pageName: document.title };
+    const hutk = hubspotCookie();
+    if (hutk) context.hutk = hutk;
+    return fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${hsPortal}/${hsForm}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields, context })
+    }).then((response) => {
+      if (!response.ok) throw new Error(response.status);
+    });
+  };
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     form.classList.add("was-validated");
     if (!form.checkValidity()) return form.reportValidity();
-    form.classList.add("is-sent");
-    form.querySelector("button[type=submit] span").textContent = "Recebemos seus dados";
+    submit.disabled = true;
+    status.textContent = "";
+    sendToHubspot()
+      .then(() => {
+        form.classList.add("is-sent");
+        submit.querySelector("span").textContent = "Recebemos seus dados";
+      })
+      .catch(() => {
+        submit.disabled = false;
+        status.textContent = "Não foi possível enviar agora. Tente novamente ou fale conosco pelo WhatsApp.";
+      });
   });
 
   const nav = document.querySelector(".nav");
