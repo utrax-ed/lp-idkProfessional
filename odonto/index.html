@@ -54,7 +54,7 @@
       <h1 class="hero__title" data-split>Tenha uma agenda cheia de pacientes qualificados e ultrapasse a barreira de faturamento de <em>R$100 mil.</em></h1>
       <p class="hero__copy">Com diagnóstico gratuito e Google Meu Negócio incluso, entregamos a estrutura que clínicas odontológicas precisam para atrair e converter pacientes, sem dor de cabeça operacional.</p>
       <div class="hero__actions">
-        <a href="https://api.whatsapp.com/send/?phone=5511936244933&amp;text=Oi%21+Tenho+uma+cl%C3%ADnica+odontol%C3%B3gica+e+gostaria+de+conversar+com+um+consultor+da+IDK+Professionals.&amp;type=phone_number&amp;app_absent=0" target="_blank" rel="noopener" class="button button--dark"><span class="button__dot"></span>Conversar no WhatsApp</a>
+        <a href="https://api.whatsapp.com/send/?phone=5511936244933&amp;text=Oi%21+Tenho+uma+cl%C3%ADnica+odontol%C3%B3gica+e+gostaria+de+conversar+com+um+consultor+da+IDK+Professionals.&amp;type=phone_number&amp;app_absent=0" target="_blank" rel="noopener" class="button button--dark"><svg class="icon button__icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>Conversar no WhatsApp</a>
         <a href="#pacotes" class="button button--outline">Ver os pacotes</a>
       </div>
       <ul class="hero__notes">
@@ -71,7 +71,7 @@
         <label class="field">Nome completo<input class="field__control" type="text" name="0-1/firstname" placeholder="Como você gostaria de ser chamado" autocomplete="name" required></label>
         <div class="lead-form__split">
           <label class="field">E-mail<input class="field__control" type="email" name="0-1/email" placeholder="voce@seudominio.com.br" autocomplete="email" required></label>
-          <label class="field">WhatsApp<input class="field__control" type="tel" name="0-2/phone" placeholder="(11) 90000-0000" autocomplete="tel" required></label>
+          <label class="field">WhatsApp<input class="field__control" type="tel" name="0-2/phone" placeholder="(11) 90000-0000" autocomplete="tel" inputmode="numeric" maxlength="15" required></label>
         </div>
         <div class="lead-form__split">
           <label class="field">Empresa<input class="field__control" type="text" name="0-2/name" placeholder="Nome da clínica" autocomplete="organization"></label>
@@ -84,6 +84,17 @@
       <button type="submit" class="button button--light button--block"><span>Gostaria de receber a proposta</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
       <p class="lead-form__status" role="status" aria-live="polite"></p>
       <p class="lead-form__fine">Ao enviar, você concorda em receber comunicações da equipe IDK Professionals. Seus dados não são divulgados a terceiros.</p>
+      <div class="lead-success" tabindex="-1">
+        <span class="lead-success__icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+        <h2 class="lead-success__title">Recebemos seus dados<span class="lead-success__name"></span>.</h2>
+        <p class="lead-success__copy">Um consultor da IDK Professionals vai entrar em contato pelo WhatsApp em até 48 horas com a proposta para a sua clínica.</p>
+        <ul class="lead-success__steps">
+          <li><strong>1</strong>Analisamos o perfil da sua clínica</li>
+          <li><strong>2</strong>Montamos a proposta com o plano ideal</li>
+          <li><strong>3</strong>Apresentamos tudo em uma conversa rápida</li>
+        </ul>
+        <a href="https://api.whatsapp.com/send/?phone=5511936244933&amp;text=Oi%21+Tenho+uma+cl%C3%ADnica+odontol%C3%B3gica+e+gostaria+de+conversar+com+um+consultor+da+IDK+Professionals.&amp;type=phone_number&amp;app_absent=0" target="_blank" rel="noopener" class="button button--light button--block"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>Adiantar a conversa no WhatsApp</span></a>
+      </div>
     </form>
   </div>
 </section>

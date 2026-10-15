@@ -70,6 +70,29 @@
   const form = document.querySelector(".lead-form");
   const submit = form.querySelector("button[type=submit]");
   const status = form.querySelector(".lead-form__status");
+  const phone = form.querySelector("input[type=tel]");
+  const formatPhone = (digits) => {
+    if (digits.length <= 2) return digits.replace(/^(\d+)/, "($1");
+    const split = digits.length === 11 ? 7 : 6;
+    const head = `(${digits.slice(0, 2)}) ${digits.slice(2, split)}`;
+    return digits.length > split ? `${head}-${digits.slice(split)}` : head;
+  };
+  const isValidPhone = (digits) => /^[1-9]{2}(9\d{8}|[2-8]\d{7})$/.test(digits);
+  phone.addEventListener("input", () => {
+    const digits = phone.value.replace(/\D/g, "").slice(0, 11);
+    phone.value = formatPhone(digits);
+    phone.setCustomValidity(isValidPhone(digits) ? "" : "Informe um WhatsApp válido com DDD, ex.: (11) 90000-0000.");
+  });
+
+  const success = form.querySelector(".lead-success");
+  const showSuccess = () => {
+    const firstName = form.elements["0-1/firstname"].value.trim().split(/\s+/)[0];
+    success.querySelector(".lead-success__name").textContent = firstName ? `, ${firstName}` : "";
+    form.classList.add("is-sent");
+    form.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+    success.focus({ preventScroll: true });
+  };
+
   const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
 
   const sendToHubspot = () => {
@@ -99,10 +122,7 @@
     submit.disabled = true;
     status.textContent = "";
     sendToHubspot()
-      .then(() => {
-        form.classList.add("is-sent");
-        submit.querySelector("span").textContent = "Recebemos seus dados";
-      })
+      .then(showSuccess)
       .catch(() => {
         submit.disabled = false;
         status.textContent = "Não foi possível enviar agora. Tente novamente ou fale conosco pelo WhatsApp.";
