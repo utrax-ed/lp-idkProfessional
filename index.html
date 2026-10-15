@@ -64,23 +64,25 @@
         <li>CRM Bitrix incluso: nenhum paciente se perde no WhatsApp</li>
       </ul>
     </div>
-    <form class="lead-form" id="orcamento" data-reveal="scale">
+    <form class="lead-form" id="orcamento" data-reveal="scale" data-hs-portal="51344730" data-hs-form="bd873321-1e22-4cf4-a460-41062f08d841" novalidate>
+      <input type="hidden" name="0-1/origem_lead" value="LP IDK PROFESSIONALS">
       <div class="lead-form__heading"><span>Solicitar orçamento</span><span class="badge">Resposta em até 48 horas</span></div>
       <div class="lead-form__fields">
-        <label class="field">Nome completo<input class="field__control" type="text" name="nome" placeholder="Como você gostaria de ser chamado" autocomplete="name" required></label>
+        <label class="field">Nome completo<input class="field__control" type="text" name="0-1/firstname" placeholder="Como você gostaria de ser chamado" autocomplete="name" required></label>
         <div class="lead-form__split">
-          <label class="field">E-mail<input class="field__control" type="email" name="email" placeholder="voce@seudominio.com.br" autocomplete="email" required></label>
-          <label class="field">WhatsApp<input class="field__control" type="tel" name="whatsapp" placeholder="(11) 90000-0000" autocomplete="tel" required></label>
+          <label class="field">E-mail<input class="field__control" type="email" name="0-1/email" placeholder="voce@seudominio.com.br" autocomplete="email" required></label>
+          <label class="field">WhatsApp<input class="field__control" type="tel" name="0-2/phone" placeholder="(11) 90000-0000" autocomplete="tel" required></label>
         </div>
         <div class="lead-form__split">
-          <label class="field">Empresa<input class="field__control" type="text" name="empresa" placeholder="Nome da clínica" autocomplete="organization"></label>
-          <label class="field">CEP<input class="field__control" type="text" name="cep" placeholder="00000-000" inputmode="numeric" autocomplete="postal-code"></label>
+          <label class="field">Empresa<input class="field__control" type="text" name="0-2/name" placeholder="Nome da clínica" autocomplete="organization"></label>
+          <label class="field">CEP<input class="field__control" type="text" name="0-2/zip" placeholder="00000-000" inputmode="numeric" autocomplete="postal-code"></label>
         </div>
-        <label class="field">Plano de interesse<select class="field__control" name="plano"><option value="">Selecione um plano</option><option>Start</option><option>Core</option><option>Premium</option></select></label>
-        <label class="field">Atuação<select class="field__control" name="atuacao"><option value="">Selecione sua área</option><option>Odontologia</option><option>Outra</option></select></label>
-        <label class="field">Orçamento mensal de mídia<select class="field__control" name="orcamento"><option>Até R$ 3.000</option><option>R$ 3.000 a R$ 6.000</option><option>Acima de R$ 6.000</option></select></label>
+        <label class="field">Plano de interesse<select class="field__control" name="0-2/plano_idk_professionals_de_interesse"><option value="">Selecione um plano</option><option value="start">Start</option><option value="core">Core</option><option value="premium">Premium</option></select></label>
+        <label class="field">Segmento<select class="field__control" name="0-2/segmento" required><option value="">Selecione seu segmento</option><option value="odontologico" selected>Odontológico</option><option value="juridico">Jurídico</option><option value="medico">Médico</option><option value="arquitetonico">Arquitetônico</option><option value="estetico">Estético</option><option value="contabil">Contábil</option><option value="psicologico">Psicológico</option><option value="engenharia">Engenharia</option></select></label>
+        <label class="field">Orçamento mensal de mídia<select class="field__control" name="0-2/orcamento_mensal_de_midia" required><option value="">Selecione uma faixa</option><option value="ate_de_3">Até R$3 mil</option><option value="entre_3_e_5">Entre R$3 mil e R$5 mil</option><option value="entre_5_e_10">Entre R$5 mil e R$10 mil</option><option value="acima_de_10">Acima de R$10 mil</option></select></label>
       </div>
       <button type="submit" class="button button--light button--block"><span>Gostaria de receber a proposta</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+      <p class="lead-form__status" role="status" aria-live="polite"></p>
       <p class="lead-form__fine">Ao enviar, você concorda em receber comunicações da equipe IDK Professionals. Seus dados não são divulgados a terceiros.</p>
     </form>
   </div>
