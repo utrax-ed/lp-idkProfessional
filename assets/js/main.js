@@ -105,6 +105,11 @@
   const sendToHubspot = () => {
     const { hsPortal, hsForm } = form.dataset;
     const fields = [...new FormData(form)]
+      .flatMap(([field, value]) => {
+        if (field !== "0-1/firstname") return [[field, value]];
+        const [firstname, lastname = ""] = value.trim().split(/\s+(.*)/);
+        return [["0-1/firstname", firstname], ["0-1/lastname", lastname]];
+      })
       .filter(([, value]) => String(value).trim())
       .map(([field, value]) => {
         const [objectTypeId, name] = field.split("/");
