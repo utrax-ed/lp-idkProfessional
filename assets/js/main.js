@@ -102,9 +102,15 @@
 
   const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
 
+  const segment = form.elements["0-2/segmento"];
+  const derivedFields = () => [
+    ["0-2/phone", phone.value],
+    ["0-1/origem_detalhada", segment.value ? segment.selectedOptions[0].text : ""]
+  ];
+
   const sendToHubspot = () => {
     const { hsPortal, hsForm } = form.dataset;
-    const fields = [...new FormData(form)]
+    const fields = [...new FormData(form), ...derivedFields()]
       .flatMap(([field, value]) => {
         if (field !== "0-1/firstname") return [[field, value]];
         const [firstname, lastname = ""] = value.trim().split(/\s+(.*)/);
