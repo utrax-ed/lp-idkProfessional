@@ -65,6 +65,7 @@
       </ul>
     </div>
     <form class="lead-form" id="orcamento" data-reveal="scale" novalidate>
+      <input type="hidden" name="segment" value="odontologico">
       <div class="lead-form__heading"><span>Solicitar orçamento</span><span class="badge">Resposta em até 48 horas</span></div>
       <div class="lead-form__fields">
         <label class="field">Nome completo<input class="field__control" type="text" name="name" placeholder="Como você gostaria de ser chamado" autocomplete="name" required></label>
@@ -77,7 +78,6 @@
           <label class="field">CEP<input class="field__control" type="text" name="cep" placeholder="00000-000" inputmode="numeric" maxlength="9" autocomplete="postal-code" required></label>
         </div>
         <label class="field">Plano de interesse<select class="field__control" name="plan" required><option value="" disabled selected>Selecione um plano</option><option value="start">START</option><option value="core">CORE</option><option value="premium">PREMIUM</option></select></label>
-        <label class="field">Atuação<select class="field__control" name="segment" required><option value="" disabled>Selecione sua área</option><option value="odontologico" selected>Odontologia</option><option value="juridico">Advocacia</option></select></label>
         <label class="field">Orçamento mensal de mídia<select class="field__control" name="budget" required><option value="ate_de_3" selected>Até R$ 3.000</option><option value="entre_3_e_5">R$ 3.000 a R$ 5.000</option><option value="entre_5_e_10">R$ 5.000 a R$ 10.000</option><option value="acima_de_10">Mais de R$ 10.000</option></select></label>
       </div>
       <button type="submit" class="button button--light button--block"><span>Gostaria de receber a proposta</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
