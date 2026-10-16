@@ -84,7 +84,7 @@
     phone.setCustomValidity(isValidPhone(digits) ? "" : "Informe um WhatsApp válido com DDD, ex.: (11) 90000-0000.");
   });
 
-  const zip = form.elements["0-2/zip"];
+  const zip = form.elements.cep;
   zip.addEventListener("input", () => {
     const digits = zip.value.replace(/\D/g, "").slice(0, 8);
     zip.value = digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
@@ -93,7 +93,7 @@
 
   const success = form.querySelector(".lead-success");
   const showSuccess = () => {
-    const firstName = form.elements["0-1/firstname"].value.trim().split(/\s+/)[0];
+    const firstName = form.elements.name.value.trim().split(/\s+/)[0];
     success.querySelector(".lead-success__name").textContent = firstName ? `, ${firstName}` : "";
     form.classList.add("is-sent");
     form.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -102,48 +102,39 @@
 
   const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
 
-  const segment = form.elements["0-2/segmento"];
-  const derivedFields = () => [
-    ["0-2/phone", phone.value],
-    ["0-1/origem_detalhada", segment.value ? segment.selectedOptions[0].text : ""]
-  ];
-
-  const sendToHubspot = () => {
-    const { hsPortal, hsForm } = form.dataset;
-    const fields = [...new FormData(form), ...derivedFields()]
-      .flatMap(([field, value]) => {
-        if (field !== "0-1/firstname") return [[field, value]];
-        const [firstname, lastname = ""] = value.trim().split(/\s+(.*)/);
-        return [["0-1/firstname", firstname], ["0-1/lastname", lastname]];
-      })
-      .filter(([, value]) => String(value).trim())
-      .map(([field, value]) => {
-        const [objectTypeId, name] = field.split("/");
-        return { objectTypeId, name, value: String(value).trim() };
-      });
-    const context = { pageUri: location.href, pageName: document.title };
-    const hutk = hubspotCookie();
-    if (hutk) context.hutk = hutk;
-    return fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${hsPortal}/${hsForm}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields, context })
-    }).then((response) => {
-      if (!response.ok) throw new Error(response.status);
+  const sendLead = () => fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...Object.fromEntries(new FormData(form)),
+      hutk: hubspotCookie(),
+      pageUri: location.href,
+      pageName: document.title
+    })
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (!result.success) throw new Error(result.error);
     });
+
+  const submitLabel = submit.querySelector("span");
+  const idleLabel = submitLabel.textContent;
+  const setSending = (sending) => {
+    submit.disabled = sending;
+    submitLabel.textContent = sending ? "Enviando..." : idleLabel;
   };
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     form.classList.add("was-validated");
     if (!form.checkValidity()) return form.reportValidity();
-    submit.disabled = true;
+    setSending(true);
     status.textContent = "";
-    sendToHubspot()
+    sendLead()
       .then(showSuccess)
       .catch(() => {
-        submit.disabled = false;
-        status.textContent = "Não foi possível enviar agora. Tente novamente ou fale conosco pelo WhatsApp.";
+        setSending(false);
+        status.textContent = "Não foi possível enviar agora. Tente novamente em instantes.";
       });
   });
 
