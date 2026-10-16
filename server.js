@@ -106,6 +106,7 @@ app.post("/api/leads", express.json({ limit: "10kb" }), async (req, res) => {
     console.error(error);
     return res.status(502).json({ success: false, error: "hubspot_unavailable" });
   }
+  console.log(`Lead enviado ao HubSpot: ${lead.email} | empresa: ${lead.company} | contato: ${lead.firstname} ${lead.lastname}`);
   if (hubspotToken) setTimeout(() => updateContactPhone(lead).catch(console.error), 5000);
   res.json({ success: true });
 });
