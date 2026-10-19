@@ -102,6 +102,7 @@
 
   const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
 
+  let metaContext;
   const sendLead = () => fetch("/api/leads", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -109,12 +110,14 @@
       ...Object.fromEntries(new FormData(form)),
       hutk: hubspotCookie(),
       pageUri: location.href,
-      pageName: document.title
+      pageName: document.title,
+      meta: metaContext
     })
   })
     .then((response) => response.json())
     .then((result) => {
       if (!result.success) throw new Error(result.error);
+      window.IDKMeta?.cadastroConfirmado(result.eventId);
     });
 
   const submitLabel = submit.querySelector("span");
@@ -128,6 +131,7 @@
     event.preventDefault();
     form.classList.add("was-validated");
     if (!form.checkValidity()) return form.reportValidity();
+    metaContext ??= window.IDKMeta?.prepararCadastro();
     setSending(true);
     status.textContent = "";
     sendLead()
