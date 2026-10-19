@@ -102,7 +102,23 @@
 
   const hubspotCookie = () => document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
 
-  let metaContext;
+  const randomId = () => crypto.randomUUID?.()
+    ?? [...crypto.getRandomValues(new Uint8Array(16))].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  const newAttempt = () => {
+    try {
+      const meta = window.IDKMeta?.prepararCadastro();
+      return { id: meta?.event_id ?? randomId(), meta };
+    } catch {
+      return { id: randomId() };
+    }
+  };
+  const confirmLead = (eventId) => {
+    try {
+      window.IDKMeta?.cadastroConfirmado(eventId);
+    } catch {}
+  };
+
+  let attempt;
   const sendLead = () => fetch("/api/leads", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -111,13 +127,14 @@
       hutk: hubspotCookie(),
       pageUri: location.href,
       pageName: document.title,
-      meta: metaContext
+      submissionId: attempt.id,
+      meta: attempt.meta
     })
   })
     .then((response) => response.json())
     .then((result) => {
       if (!result.success) throw new Error(result.error);
-      window.IDKMeta?.cadastroConfirmado(result.eventId);
+      return result.eventId;
     });
 
   const submitLabel = submit.querySelector("span");
@@ -131,11 +148,14 @@
     event.preventDefault();
     form.classList.add("was-validated");
     if (!form.checkValidity()) return form.reportValidity();
-    metaContext ??= window.IDKMeta?.prepararCadastro();
+    attempt ??= newAttempt();
     setSending(true);
     status.textContent = "";
     sendLead()
-      .then(showSuccess)
+      .then((eventId) => {
+        showSuccess();
+        confirmLead(eventId);
+      })
       .catch(() => {
         setSending(false);
         status.textContent = "Não foi possível enviar agora. Tente novamente em instantes.";
